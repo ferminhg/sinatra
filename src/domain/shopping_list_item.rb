@@ -1,3 +1,5 @@
+require 'json'
+
 class ShoppingListItem
   attr_reader :quantity
   private_class_method :new
@@ -6,7 +8,7 @@ class ShoppingListItem
     @product_name.empty?
   end
 
-  def self.create(product_name, quantity)
+  def self.create(product_name, quantity=0)
     new(product_name, quantity)
   end
  
@@ -18,6 +20,17 @@ class ShoppingListItem
   def to_s
     quantity_s = " (#{@quantity})" if quantity > 0 
     "#{@product_name}#{quantity_s}"
+  end
+
+  def as_json(options={})
+    {
+      product_name: @product_name,
+      quantity: @quantity
+    }
+  end
+
+  def to_json(*options)
+    as_json(*options).to_json(*options)
   end
 end
 
